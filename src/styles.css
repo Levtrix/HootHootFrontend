@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Bree+Serif');
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great');
+
+/* Application-wide Styles */
+h1 {
+  color: #ffffff;
+  font-family: 'Fredericka the Great', Arial, Helvetica, sans-serif;
+  font-size: 250%;
+  font-weight: bold;
+}
+
+h2, h3, h4 {
+  color: #1a0d00;
+  font-family: 'Bree Serif', Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+body {
+  max-width: 500px;
+  margin: auto;
+}
+
+body, input[type="text"], button {
+  color: white;
+  font-family: 'Bree Serif', Cambria, Georgia;
+}
+
+/* everywhere else */
+* {
+  font-family: 'Bree Serif', Arial, Helvetica, sans-serif;
+}
