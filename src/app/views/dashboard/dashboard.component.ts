@@ -1,5 +1,8 @@
-import { element } from 'protractor';
-import { Component, OnInit } from '@angular/core';
+import { Vogelteller } from './../../classes/vogelteller';
+import { Bezoek } from './../../classes/bezoek';
+import { TelgebiedService } from './../../services/telgebied.service';
+import { Telgebied } from './../../classes/telgebied';
+import { Component, OnInit, Input } from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -8,14 +11,23 @@ import * as L from 'leaflet';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  @Input() telgebied: Telgebied;
+  dateToday: Date = new Date();
+  vogelteller: Vogelteller = new Vogelteller(1, 'Steve', 'Steve01');
+  bezoek: Bezoek = new Bezoek(this.dateToday, this.telgebied, this.vogelteller, 1);
 
-  constructor() { }
+  constructor(
+    private telgebiedService: TelgebiedService,
+  ) { }
 
   ngOnInit() {
-    var southWest = L.latLng(40.712, -74.227);
-    var northEast = L.latLng(40.774, -74.125);
-    var bounds = L.latLngBounds(southWest, northEast);
-    var popup = L.popup();
+    this.getTelgebied();
+
+    // TODO: Add code to show all popups on the maps upon loading
+    const southWest = L.latLng(this.telgebied.southWestLat, this.telgebied.southWestLng);
+    const northEast = L.latLng(this.telgebied.northEastLat, this.telgebied.northEastLng);
+    const bounds = L.latLngBounds(southWest, northEast);
+    const popup = L.popup();
 
     const map = L.map('map', {
       maxBounds: bounds,
@@ -37,5 +49,15 @@ export class DashboardComponent implements OnInit {
           .setContent('You clicked the map at ' + e.latlng.toString())
           .openOn(map);
     }
+  }
+
+  getTelgebied(): void {
+    this.telgebied = this.telgebiedService.tempTelpgebied();
+
+    this.telgebied.bezoeken.push(this.bezoek);
+  }
+
+  addWaarneming(): void {
+    // Implement this method to add a waarneming with the current selected lat + lng
   }
 }

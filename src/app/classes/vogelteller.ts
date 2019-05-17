@@ -1,7 +1,7 @@
 export class Vogelteller {
-  private id: number;
-  private naam: string;
-  private gebruikersnaam: string;
+  id: number;
+  naam: string;
+  gebruikersnaam: string;
 
   constructor(id: number, naam: string, gebruikersnaam: string) {
     this.id = id;
