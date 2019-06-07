@@ -9,20 +9,7 @@ import { GenericService } from './generic.service';
 })
 
 export class VogelService extends GenericService<Vogel, number> {
-  dateToday: Date = new Date();
-  vogels: Vogel[] = [];
-  vogel: Vogel = new Vogel(1, 'Blauwe Reiger', 'BR', this.dateToday, this.dateToday, 5);
-  vogel2: Vogel = new Vogel(2, 'Appelvink', 'AV', this.dateToday, this.dateToday, 3);
-
-  constructor(http: HttpClient, messageService: MessageService) {
+    constructor(http: HttpClient, messageService: MessageService) {
     super(http, messageService, 'vogels');
-  }
-
-  tmpVogels(): Vogel[] {
-    this.vogels = [];
-    this.vogels.push(this.vogel);
-    this.vogels.push(this.vogel2);
-
-    return this.vogels;
   }
 }

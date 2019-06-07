@@ -36,13 +36,12 @@ export class DashboardComponent implements OnInit {
     private vogeltellerService: VogeltellerService,
   ) {  }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.getTelgebied();
-    await this.getVogelteller();
-    await this.getVogels();
-    console.log(this.vogelteller.naam)
-    console.log('why am i first!?');
+    this.getVogelteller();
+    this.getVogels();
 
+    // TODO: Implement that the code below waits until the code above initialized all the needed fields with the needed data
     // TODO: Add code to show all popups on the maps upon loading
     const southWest = L.latLng(this.telgebied.southWestLat, this.telgebied.southWestLng);
     const northEast = L.latLng(this.telgebied.northEastLat, this.telgebied.northEastLng);
@@ -102,21 +101,23 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  async getTelgebied() {
+  getTelgebied(): void {
     // TODO: Needs to be changed to work with the database
     this.telgebied = this.telgebiedService.tempTelpgebied();
 
     this.telgebied.bezoeken.push(this.bezoek);
   }
 
-  async getVogels() {
-    await this.vogelService.getAll()
+  getVogels(): void {
+    this.vogelService.getAll()
       .subscribe(vogels => this.vogels = vogels);
   }
 
-  async getVogelteller() {
-    await this.vogeltellerService.getById(1)
+  getVogelteller(): void {
+    this.vogeltellerService.getById(1)
       .subscribe(vogelteller => this.vogelteller = vogelteller);
+
+    console.log(this.vogelteller);
   }
 
   onVogelChange(vogel: Vogel): void {
