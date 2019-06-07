@@ -14,7 +14,7 @@ export class GenericService<T, ID> {
   };
 
   constructor(protected http: HttpClient, protected messageService: MessageService, serviceNameUrl: string) {
-    this.url = 'http://insertlink.domain/hoothoot/' + serviceNameUrl;
+    this.url = 'http://localhost:8080/hoothoot/' + serviceNameUrl;
   }
 
   protected getUrl(): string {
@@ -22,7 +22,7 @@ export class GenericService<T, ID> {
   }
 
   getById(id: ID): Observable<T> {
-    return this.http.get<T>(this.getUrl() + id).pipe(
+    return this.http.get<T>(this.getUrl() + '/' + id).pipe(
       tap(_ => this.log(`fetched id=${id}`)),
       catchError(this.handleError<T>(`getById id=${id}`))
     );
@@ -44,14 +44,14 @@ export class GenericService<T, ID> {
   }
 
   edit(id: ID, t: T): Observable<T> {
-    return this.http.put<T>(this.getUrl() + id, t, this.httpOptions).pipe(
+    return this.http.put<T>(this.getUrl() + '/' + id, t, this.httpOptions).pipe(
       tap(_ => this.log(`updated ${t.constructor.name}`)),
       catchError(this.handleError<T>('edit'))
     );
   }
 
   delete(id: ID, t: T): Observable<T> {
-    return this.http.delete<T>(this.getUrl() + id, this.httpOptions).pipe(
+    return this.http.delete<T>(this.getUrl() + '/' + id, this.httpOptions).pipe(
       tap(_ => this.log(`deleted ${t.constructor.name} id=${id}`)),
       catchError(this.handleError<T>('delete'))
     );
@@ -63,11 +63,11 @@ export class GenericService<T, ID> {
   }
 
    /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
+    * Handle Http operation that failed.
+    * Let the app continue.
+    * @param operation - name of the operation that failed
+    * @param result - optional value to return as the observable result
+    */
   // tslint:disable-next-line: no-shadowed-variable
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

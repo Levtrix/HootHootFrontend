@@ -1,6 +1,7 @@
 import { Waarneming } from './waarneming';
 import { Vogelteller } from './vogelteller';
 import { Telgebied } from './telgebied';
+
 export class Bezoek {
   id: number;
   startTijd: Date;

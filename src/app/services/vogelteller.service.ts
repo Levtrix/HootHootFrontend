@@ -9,7 +9,13 @@ import { Injectable } from '@angular/core';
 })
 
 export class VogeltellerService extends GenericService<Vogelteller, number>{
+  vogelteller: Vogelteller = new Vogelteller(1, 'Steve', 'Steve01');
+
   constructor(http: HttpClient, messageService: MessageService) {
-    super(http, messageService, 'vogelteller/');
+    super(http, messageService, 'vogeltellers');
+  }
+
+  tmpVogelteller(): Vogelteller {
+    return this.vogelteller;
   }
 }

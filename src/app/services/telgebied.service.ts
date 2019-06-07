@@ -1,3 +1,4 @@
+import { Bezoek } from './../classes/bezoek';
 import { MessageService } from './message.service';
 import { HttpClient } from '@angular/common/http';
 import { Telgebied } from './../classes/telgebied';
@@ -10,7 +11,7 @@ import { GenericService } from './generic.service';
 
 export class TelgebiedService extends GenericService<Telgebied, number> {
   constructor(http: HttpClient, messageService: MessageService) {
-    super(http, messageService, 'telgebieden/');
+    super(http, messageService, 'telgebieden');
   }
 
   tempTelpgebied(): Telgebied {

@@ -1,5 +1,5 @@
 export enum SoortWaarneming {
   VogelAanwezig = 'VA',
-  TerritoriumIndicerend = 'T',
+  TerritoriumIndicerend = 'TI',
   NestIndirecend = 'NI'
 }
