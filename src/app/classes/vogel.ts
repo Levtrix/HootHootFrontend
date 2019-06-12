@@ -4,7 +4,7 @@ export class Vogel {
   afkorting: string;
   startBroedperiode: Date;
   eindBroedperiode: Date;
-  puntenBroedperiode: number;
+  puntenBroedpaar: number;
 
 // tslint:disable-next-line: max-line-length
   constructor(id?: number, vogelsoort?: string, afkorting?: string, startBroedperiode?: Date, eindBroedperiode?: Date, puntenBroedpaar?: number) {
@@ -13,6 +13,6 @@ export class Vogel {
     this.afkorting = afkorting;
     this.startBroedperiode = startBroedperiode;
     this.eindBroedperiode = eindBroedperiode;
-    this.puntenBroedperiode = puntenBroedpaar;
+    this.puntenBroedpaar = puntenBroedpaar;
   }
 }

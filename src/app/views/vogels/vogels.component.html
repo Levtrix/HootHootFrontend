@@ -1,0 +1,6 @@
+<h2>Lijst met alle huidigde vogels in de database</h2>>
+<ul class="vogels">
+  <li *ngFor="let vogel of vogels">
+    <span class="badge">&#9679;</span>{{vogel.vogelsoort}}, {{vogel.afkorting | uppercase}}
+  </li>
+</ul>

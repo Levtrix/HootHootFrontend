@@ -7,13 +7,17 @@ import { MessagesComponent } from './messages/messages.component';
 import { NotfoundComponent } from './views/notfound/notfound.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { VogeltellerDetailComponent } from './views/vogelteller-detail/vogelteller-detail.component';
+import { VogelsComponent } from './views/vogels/vogels.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     MessagesComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    VogeltellerDetailComponent,
+    VogelsComponent,
   ],
   imports: [
     BrowserModule,

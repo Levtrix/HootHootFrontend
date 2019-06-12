@@ -8,7 +8,7 @@ export class Waarneming {
   lat: number;
   lng: number;
 
-  constructor(datumWaarneming: Date, vogel: Vogel, soortWaarneming: SoortWaarneming, lat: number, lng: number, id?: number) {
+  constructor(datumWaarneming?: Date, vogel?: Vogel, soortWaarneming?: SoortWaarneming, lat?: number, lng?: number, id?: number) {
     this.id = id;
     this.datumWaarneming = datumWaarneming;
     this.vogel = vogel;

@@ -10,6 +10,6 @@ import { Injectable } from '@angular/core';
 
 export class VogeltellerService extends GenericService<Vogelteller, number>{
   constructor(http: HttpClient, messageService: MessageService) {
-    super(http, messageService, 'vogelteller');
+    super(http, messageService, 'vogeltellers');
   }
 }

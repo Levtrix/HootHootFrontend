@@ -13,6 +13,7 @@ export class GenericService<T, ID> {
     })
   };
 
+// tslint:disable-next-line: max-line-length
   constructor(protected http: HttpClient, protected messageService: MessageService, serviceNameUrl: string) {
     this.url = 'http://localhost:8080/hoothoot/' + serviceNameUrl;
   }

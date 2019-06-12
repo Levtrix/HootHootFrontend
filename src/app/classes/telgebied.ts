@@ -11,7 +11,7 @@ export class Telgebied {
   northEastLng: number;
 
 // tslint:disable-next-line: max-line-length
-  constructor(naam: string, kaart: string, southWestLat: number, southWestLng: number, northEastLat: number, northEastLng: number, id?: number, bezoeken?: Bezoek[]) {
+  constructor(id?: number, naam?: string, kaart?: string, bezoeken?: Bezoek[], southWestLat?: number, southWestLng?: number, northEastLat?: number, northEastLng?: number) {
     this.id = id;
     this.naam = naam;
     this.kaart = kaart;

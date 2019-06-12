@@ -1,3 +1,4 @@
+import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { VogeltellerService } from './../../services/vogelteller.service';
 import { VogelService } from './../../services/vogel.service';
 import { SoortWaarneming } from './../../enums/soortWaarneming';
@@ -6,7 +7,7 @@ import { Vogelteller } from './../../classes/vogelteller';
 import { Bezoek } from './../../classes/bezoek';
 import { TelgebiedService } from './../../services/telgebied.service';
 import { Telgebied } from './../../classes/telgebied';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as L from 'leaflet';
 import { Vogel } from 'src/app/classes/vogel';
 
@@ -21,10 +22,11 @@ export class DashboardComponent implements OnInit {
   soortWaarneming: SoortWaarneming;
   dateToday: Date = new Date();
   vogel: Vogel = new Vogel();
-  vogels: Vogel[] = [];
-  vogelteller: Vogelteller = new Vogelteller();
+  vogels: Vogel[];
+  vogelteller: Vogelteller;
+  popupform: String;
 
-  bezoek: Bezoek = new Bezoek(this.dateToday, this.telgebied, this.vogelteller, 1);
+  bezoek: Bezoek = new Bezoek(1, this.dateToday, this.telgebied, this.vogelteller);
   tmpSoortWaarneming: SoortWaarneming;
   w: Waarneming;
   lat: number;
@@ -34,37 +36,16 @@ export class DashboardComponent implements OnInit {
     private telgebiedService: TelgebiedService,
     private vogelService: VogelService,
     private vogeltellerService: VogeltellerService,
-  ) {  }
+  ) {   }
 
   ngOnInit() {
     this.getTelgebied();
     this.getVogelteller();
-    this.getVogels();
 
-    // TODO: Implement that the code below waits until the code above initialized all the needed fields with the needed data
     // TODO: Add code to show all popups on the maps upon loading
     const southWest = L.latLng(this.telgebied.southWestLat, this.telgebied.southWestLng);
     const northEast = L.latLng(this.telgebied.northEastLat, this.telgebied.northEastLng);
     const bounds = L.latLngBounds(southWest, northEast);
-    var popupForm = '<h4>Waarneming toevoegen/wijzigen</h4>' +
-      '<div>' +
-      '<label>Vogelteller: ' + this.vogelteller.naam + '</label><br>' +
-      '<label>Vogel:</label><br>' +
-      '<select [(ngModel)]="vogel" id = "vogellist" (change)="onVogelChange(vogel)">';
-
-    for (let vogel of this.vogels) {
-      popupForm = popupForm + '<option value = "' + vogel + '">' + vogel.vogelsoort + '</option>';
-    }
-
-    popupForm = popupForm + '</select><br>' +
-    '<label>Soort waarnemeing:</label><br>' +
-    '<select [(ngModel)]="soortWaarneming" (change)="onSoortWaarnemingChange(soortWaarneming)">' +
-      '<option value="soortWaarneming.VogelAanwezig">VogelAanwezig</option>' +
-      '<option value="soortWaarneming.TerritoriumIndicerend">TerritoriumIndicerend</option>' +
-      '<option value="soortWaarneming.NestIndicerend">NestIndicerend</option>' +
-    '</select><br>' +
-    '<button (click)="addWaarneming()">Toevoegen</button>' +
-    '</div><br>';
 
     const map = L.map('map', {
       maxBounds: bounds,
@@ -89,11 +70,11 @@ export class DashboardComponent implements OnInit {
       this.lat = e.latlng.lat;
       this.lng = e.latlng.lng;
 
-      // TODO: Rework this to add a marker onMapClick with a form in the popup
       console.log(this.lat, this.lng);
       var marker = L.marker([this.lat, this.lng]);
       marker.addTo(map);
-      marker.bindPopup(popupForm, {
+      // TODO: Fix popupform
+      marker.bindPopup(this.popupform, {
         keepInView: true,
         closeButton: false
       }).openPopup();
@@ -108,23 +89,41 @@ export class DashboardComponent implements OnInit {
     this.telgebied.bezoeken.push(this.bezoek);
   }
 
-  getVogels(): void {
+  getVogels(): Variable {
+    var vogelsString;
+
     this.vogelService.getAll()
-      .subscribe(vogels => this.vogels = vogels);
+      .subscribe(serviceVogels => {
+        this.vogels = [];
+
+        for(let vogel of serviceVogels) {
+          // tslint:disable-next-line: max-line-length
+          this.vogels.push(new Vogel(vogel.id, vogel.vogelsoort, vogel.afkorting, vogel.startBroedperiode, vogel.eindBroedperiode, vogel.puntenBroedpaar));
+        }
+
+        for (let vogel of this.vogels) {
+            vogelsString = vogelsString + '<option value = "' + vogel + '">' + vogel.vogelsoort + '</option>';
+          }
+      });
+
+    return vogelsString;
   }
 
-  getVogelteller(): void {
+  getVogelteller() {
     this.vogeltellerService.getById(1)
-      .subscribe(vogelteller => this.vogelteller = vogelteller);
+      .subscribe(serviceVogelteller => {
+        this.vogelteller = new Vogelteller(serviceVogelteller.id, serviceVogelteller.naam, serviceVogelteller.gebruikersnaam);
 
-    console.log(this.vogelteller);
+        this.popupform = new String("test");
+        this.popupform = this.buildVogeltellerPopupForm();
+      });
   }
 
   onVogelChange(vogel: Vogel): void {
     this.vogel = vogel;
   }
 
-  onSoortWaarnemingChange(soortWaarneming: SoortWaarneming): void {
+  onSoortWaarnemingChange(soortWaarneming: SoortWaarneming) {
     this.tmpSoortWaarneming = soortWaarneming;
   }
 
@@ -136,5 +135,25 @@ export class DashboardComponent implements OnInit {
 
   private buildNewWaarnemingObject(): Waarneming {
     return new Waarneming(this.dateToday, this.vogel, this.tmpSoortWaarneming, this.lat, this.lng, this.bezoek.waarnemingen.length);
+  }
+
+  private buildVogeltellerPopupForm(): string {
+    var form = '<h4>Waarneming toevoegen/wijzigen</h4>' +
+    '<div>' +
+    '<label>Vogelteller: ' + this.vogelteller.naam + '</label><br>' +
+    '<label>Vogel:</label><br>' +
+    '<select [(ngModel)]="vogels" id = "vogellist" (change)="onVogelChange(vogel)">';
+
+    form = form + this.getVogels() + '</select><br>' +
+    '<label>Soort waarnemeing:</label><br>' +
+    '<select [(ngModel)]="soortWaarneming" (change)="onSoortWaarnemingChange(soortWaarneming)">' +
+      '<option value="soortWaarneming.VogelAanwezig">VogelAanwezig</option>' +
+      '<option value="soortWaarneming.TerritoriumIndicerend">TerritoriumIndicerend</option>' +
+      '<option value="soortWaarneming.NestIndicerend">NestIndicerend</option>' +
+    '</select><br>' +
+    '<button (click)="addWaarneming()">Toevoegen</button>' +
+    '</div><br>';
+
+    return form;
   }
 }

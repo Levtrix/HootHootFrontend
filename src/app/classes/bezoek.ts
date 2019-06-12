@@ -10,7 +10,8 @@ export class Bezoek {
   vogelteller: Vogelteller;
   waarnemingen: Waarneming[] = [];
 
-  constructor(startTijd: Date, telgebied: Telgebied, vogelteller: Vogelteller, id?: number, waarnemingen?: Waarneming[], eindTijd?: Date) {
+// tslint:disable-next-line: max-line-length
+  constructor(id?: number, startTijd?: Date, telgebied?: Telgebied, vogelteller?: Vogelteller, waarnemingen?: Waarneming[], eindTijd?: Date, ) {
     this.id = id;
     this.startTijd = startTijd;
     this.eindTijd = eindTijd;

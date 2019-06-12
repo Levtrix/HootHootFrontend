@@ -14,7 +14,9 @@ export class TelgebiedService extends GenericService<Telgebied, number> {
     super(http, messageService, 'telgebieden');
   }
 
+  bezoeken: Bezoek[] = [];
+
   tempTelpgebied(): Telgebied {
-    return new Telgebied('Test telgebied', 'test kaart', 40.712, -74.227, 40.774, -74.125, 1);
+    return new Telgebied(1, 'Test telgebied', 'test kaart', this.bezoeken, 40.712, -74.227, 40.774, -74.125);
   }
 }
